@@ -1,0 +1,93 @@
+class Predicate:
+    def __init__(self, name, arity):
+        self.name = name
+        self.arity = arity
+
+    def __call__(self, *args):
+        if len(args) != self.arity:
+            raise ValueError(f"Expected {self.arity} arguments, but got {len(args)}")
+        return (self.name, args)
+
+    def __repr__(self):
+        return f"{self.name}/{self.arity}"
+
+
+class Variable:
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return self.name
+
+
+class Quantifier:
+    def __init__(self, var, formula):
+        self.var = var
+        self.formula = formula
+
+    def __repr__(self):
+        return f"{self.__class__.__name__} {self.var}: {self.formula}"
+
+
+class ForAll(Quantifier):
+    pass
+
+
+class Exists(Quantifier):
+    pass
+
+
+def substitute(formula, variable, value):
+    if isinstance(formula, Variable):
+        return value if formula.name == variable.name else formula
+    elif isinstance(formula, tuple):
+        return tuple(substitute(sub_formula, variable, value) for sub_formula in formula)
+    elif isinstance(formula, Quantifier):
+        if formula.var.name == variable.name:
+            return formula
+        else:
+            return formula.__class__(formula.var, substitute(formula.formula, variable, value))
+    else:
+        return formula
+
+
+def evaluate(formula, variable_bindings):
+    if isinstance(formula, tuple):
+        return formula[0]  # Just return the value of the tuple
+    elif isinstance(formula, Variable):
+        return variable_bindings.get(formula.name, formula)
+    elif isinstance(formula, Quantifier):
+        return formula.__class__(formula.var, evaluate(formula.formula, variable_bindings))
+    else:
+        return formula
+
+
+def main():
+    # Define predicates
+    p = Predicate("P", 1)
+    q = Predicate("Q", 2)
+
+    # Define variables
+    x = Variable("x")
+    y = Variable("y")
+
+    # Define formulas
+    formula1 = p(x)
+    formula2 = q(x, y)
+
+    # Define quantifiers
+    forall_x = ForAll(x, formula1)
+    exists_y = Exists(y, formula2)
+
+    # Variable bindings
+    variable_bindings = {x.name: "a", y.name: "b"}
+
+    # Evaluate formulas
+    print(f"Evaluating formula {formula1}: {evaluate(formula1, variable_bindings)}")
+    print(f"Evaluating formula {formula2}: {evaluate(formula2, variable_bindings)}")
+    print(f"Evaluating formula {forall_x}: {evaluate(forall_x, variable_bindings)}")
+    print(f"Evaluating formula {exists_y}: {evaluate(exists_y, variable_bindings)}")
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,35 @@
+from queue import PriorityQueue 
+def best_first_search(actual_Src, target, n):
+    visited = [False] * n
+    pq = PriorityQueue()
+    pq.put((0, actual_Src))
+    visited[actual_Src] = True
+    while not pq.empty():
+        u = pq.get()[1]
+        print(u, end=" ")
+        if u == target:
+            break
+        for v, c in graph[u]:
+            if not visited[v]:
+                visited[v] = True
+                pq.put((c, v))
+    print()
+graph = [
+    [(1, 3), (2, 6), (3, 5)],  # Adjacency list for node 0
+    [(4, 9), (5, 8)],           # Adjacency list for node 1
+    [(6, 12), (7, 14)],         # Adjacency list for node 2
+    [(8, 7)],                   # Adjacency list for node 3
+    [(9, 5), (10, 6)],          # Adjacency list for node 4
+    [],                         # Adjacency list for node 5
+    [],                         # Adjacency list for node 6
+    [],                         # Adjacency list for node 7
+    [(9, 5), (10, 6)],          # Adjacency list for node 8
+    [(11, 1), (12, 10), (13, 2)],# Adjacency list for node 9
+    [],                         # Adjacency list for node 10
+    [],                         # Adjacency list for node 11
+    [],                         # Adjacency list for node 12
+    []                          # Adjacency list for node 13
+]
+source = 0
+target = 9
+best_first_search(source, target, len(graph)) 

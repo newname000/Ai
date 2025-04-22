@@ -1,0 +1,53 @@
+# Define the graph
+graph = { 
+    'S': ['A', 'B', 'C'], 
+    'A': ['D', 'E'], 
+    'E': ['G'], 
+    'B': ['F'], 
+    'C': ['H', 'I'], 
+    'D': [], 
+    'F': [], 
+    'H': [], 
+    'I': [], 
+    'G': [] 
+}
+
+# List for visited nodes
+visited_bfs = []  # Visited nodes for BFS
+queue = []        # Queue for BFS
+
+# BFS function
+def bfs(visited, graph, node):
+    visited.append(node)
+    queue.append(node)
+    
+    while queue:
+        m = queue.pop(0)
+        print(m, end=" ")  # Print the current node
+        
+        for neighbour in graph[m]:
+            if neighbour not in visited:
+                visited.append(neighbour)
+                queue.append(neighbour)
+
+# Visited set for DFS
+visited_dfs = set()
+
+# DFS function
+def dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()  # Initialize visited set if not provided
+
+    if node not in visited:
+        print(node, end=" ")
+        visited.add(node)
+        for neighbor in graph[node]:
+            dfs(graph, neighbor, visited)
+
+# Call BFS
+print("Following is the Breadth-First Search:")
+bfs(visited_bfs, graph, 'S')
+
+# Call DFS
+print("\nFollowing is the Depth-First Search:")
+dfs(graph, 'S', visited_dfs)

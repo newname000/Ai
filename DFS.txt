@@ -1,0 +1,26 @@
+def dfs(graph, node, visited=None):
+    if visited is None:
+        visited = set()  # Initialize visited set if not provided
+
+    if node not in visited:
+        print(node)
+        visited.add(node)
+        for neighbor in graph[node]:
+            dfs(graph, neighbor, visited)
+
+# Define the graph
+graph = { 
+    'S': ['A', 'B', 'C'], 
+    'A': ['D', 'E'], 
+    'E': ['G'], 
+    'B': ['F'], 
+    'C': ['H', 'I'], 
+    'D': [], 
+    'F': [], 
+    'H': [], 
+    'I': [], 
+    'G': [] 
+}
+
+print("Following is the Depth-First Search")
+dfs(graph, 'S')

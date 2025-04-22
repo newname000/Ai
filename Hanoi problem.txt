@@ -1,0 +1,25 @@
+def move_disk(disk, source, target):
+    print(f"Move disk {disk} from {source} to {target}")
+
+def tower_of_hanoi(n, source, target, auxiliary):
+    if n == 1:
+        move_disk(n, source, target)
+        return
+    tower_of_hanoi(n - 1, source, auxiliary, target)
+    move_disk(n, source, target)
+    tower_of_hanoi(n - 1, auxiliary, target, source)
+
+def main():
+    try:
+        num_disks = int(input("Enter the number of disks: "))
+        if num_disks <= 0:
+            print("Number of disks must be a positive integer.")
+            return
+        print(f"Solving Tower of Hanoi for {num_disks} disks:")
+        tower_of_hanoi(num_disks, 'A', 'C', 'B')  # A, B, C are the names of the rods
+    except ValueError:
+        print("Please enter a valid integer.")
+
+if __name__ == "__main__":
+    main()
+
